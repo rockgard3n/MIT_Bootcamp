@@ -1,0 +1,63 @@
+<div id="ball" style="
+  z-index:5;
+  position:absolute;
+  left:0px;
+  top:0px;
+  width:50px;
+  height:50px;
+  border-radius:0%;
+  background:green"></div>
+
+<script>
+
+//Set global variable that would contain the position, velocity and the html element "ball"
+var positionX = 0;
+var positionY = 0;
+var velocityX = 1;
+var velocityY = .5;
+var reverseX = false;
+var reverseY = false;
+var ball = document.getElementById("ball");
+
+//write a function that can change the position of the html element "ball"
+function moveBall() {
+  // two x-axis coordinates
+  var Xmin = 0;
+  var Xmax = 1000;
+
+  // two y-axis coordinates
+  var Ymin = 0;
+  var Ymax = 1000;
+
+  if (reverseX) {
+    positionX = positionX - velocityX;
+    ball.style.left = positionX + "px";
+    ball.style.background = "blue";
+  } else {
+    positionX = positionX + velocityX;
+    ball.style.left = positionX + "px";
+    ball.style.background = "green";
+  }
+  if (reverseY) {
+    positionY = positionY - velocityY;
+    ball.style.top = positionY + "px";
+    ball.style.background = "blue";
+  } else {
+    positionY = positionY + velocityY;
+    ball.style.top = positionY + "px";
+    ball.style.background = "green";
+  }
+  if (
+    positionX > Xmax ||
+    positionX < Xmin) {
+    velocityX = velocityX + Math.random() - Math.random();
+    reverseX = !reverseX;
+  }
+  if(positionY > Ymax || positionY < Ymin) {
+    velocityY = velocityY + Math.random() - Math.random();
+    reverseY = !reverseY;
+  }
+}
+
+setInterval(moveBall, 1);
+</script>
