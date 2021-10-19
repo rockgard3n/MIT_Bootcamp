@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+    <head>
+        <title>Introduction to JavaScript Summary</title>
+        <link rel="stylesheet" href="./style.css">
+        <link rel="stylesheet" type="text/css" href="./proxima-nova-web-fonts-master/fonts/fonts.css" />
+    </head>
+    <body>
+        <div class="container">
+        <img src="mitxprologo.jpg" alt="MIT XPro Logo" width="250px" height="80px">
+        <h1 class="header-text">Introduction to JavaScript Summary</h1>
+        </div>
+        <p>Please review the concepts covered this week. </p>
+        <h2 id="variables">Variables</h2>
+        <p>Variables are a named reference to a value. They let you access values through a predetermined name. </p>
+        <p>Variables are declared using:</p>
+        <ol>
+            <li>Const</li>
+            <li>Let</li>
+            <li>Var</li>
+        </ol>
+        <pre><code class="lang-js"><span class="hljs-attribute">const name</span> = <span class="hljs-string">'Steve'</span>;
+        <span class="hljs-attribute">var name</span> = <span class="hljs-string">'Lisa'</span>;
+        <span class="hljs-attribute">let name</span> = <span class="hljs-string">'Charlotte'</span>;
+        </code></pre>
+        <h2 id="arrays">Arrays</h2>
+        <p>An array is an ordered collection of data (either primitive or object depending upon the language). Compared with variable that can add only one value, arrays are used
+            to store multiple values in a single variable.</p>
+        <pre><code class="lang-js"><span class="hljs-attribute">let names</span> = [<span class="hljs-string">'Steve'</span>, <span class="hljs-string">'Lisa'</span>, <span class="hljs-string">'Charlotte'</span>];
+        </code></pre>
+        <h2 id="objects">Objects</h2>
+        <p>An object is a collection of properties, and a property is an association between a name (or key) and a value.</p>
+        <pre><code class="lang-js">let student = {
+        <span class="hljs-built_in">name</span>: <span class="hljs-string">'Steve'</span>,
+        age: <span class="hljs-number">20</span>, 
+        classes: {<span class="hljs-built_in">name</span>: <span class="hljs-string">'Intro to Programming'</span>, <span class="hljs-built_in">name</span>: <span class="hljs-string">'Advanced Algebra'</span>}
+        }
+        </code></pre>
+        <h2 id="functions">Functions</h2>
+        <p>Functions are one of the fundamental building blocks in JavaScript. A function in JavaScript is similar to a
+        procedure—a set of statements that performs a task or calculates a value, but for a procedure to qualify as a
+        function, it should take some input and return an output where there's some obvious relationship between the input
+        and the output.</p>
+        <p>A function definition (also called a function declaration, or function statement) consists of the function keyword,
+            followed by:</p>
+        <ul>
+            <li>The name of the function</li>
+            <li>A list of parameters to the function, enclosed in parentheses and separated by commas</li>
+            <li>The JavaScript statements that define the function, enclosed in curly brackets, {...}</li>
+        </ul>
+        <p>Here is a function, called sayName.</p>
+        <pre><code class="lang-js"><span class="hljs-function"><span class="hljs-keyword">function</span></span> sayName(<span class="hljs-keyword">name</span>) {
+        console.<span class="hljs-built_in">log</span>(<span class="hljs-keyword">name</span>);
+        }
+        </code></pre>
+        <p>The function <code>sayName</code> takes one parameter, called <code>name</code>. The function consists of one
+            statement that says to print the parameter of the function (i.e. <code>name</code>) to the console. </p>
+        <p>Primitive parameters (such as a number) are passed into functions by value. The value is also passed to a function, but if
+            the function changes the value of the parameter, this change is not reflected globally or in the calling function.
+        </p>
+        <p>If you pass an object (i.e., a non-primitive value, such as an array or a user-defined object) as a parameter and the
+            function changes the object&#39;s properties, that change is visible outside the function as shown in the following
+            example:</p>
+        <pre><code class="lang-js">function myFunc(theObject) {
+        theObject.<span class="hljs-built_in">make</span> = <span class="hljs-string">'Toyota'</span>;
+        }
+
+        <span class="hljs-keyword">var</span> mycar = {<span class="hljs-built_in">make</span>: <span class="hljs-string">'Honda'</span>, model: <span class="hljs-string">'Accord'</span>, year: <span class="hljs-number">1998</span>};
+        <span class="hljs-keyword">var</span> x, y;
+
+        x = mycar.<span class="hljs-built_in">make</span>; <span class="hljs-comment">// x gets the value "Honda"</span>
+
+        myFunc(mycar);
+        y = mycar.<span class="hljs-built_in">make</span>; <span class="hljs-comment">// y gets the value "Toyota"</span>
+                        <span class="hljs-comment">// (the make property was changed by the function)</span>
+        </code></pre>
+        <h2 id="for-loops">For loops</h2>
+        <p>The <code>for</code> statement creates a loop that consists of three optional expressions, enclosed in parentheses
+            and separated by semicolons, followed by a statement (usually a block statement) to be executed in the loop.</p>
+        <pre><code class="lang-js"><span class="hljs-built_in">let</span> <span class="hljs-built_in">str</span> = '';
+
+        <span class="hljs-keyword">for</span> (<span class="hljs-built_in">let</span> i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">9</span>; i++) {
+        <span class="hljs-built_in">str</span> = <span class="hljs-built_in">str</span> + i;
+        }
+
+        console.<span class="hljs-built_in">log</span>(<span class="hljs-built_in">str</span>);
+        <span class="hljs-comment">// expected output: "012345678"</span>
+        </code></pre>
+        <p>Source: <a href="https://developer.mozilla.org/en-US/">MDN</a></p>
+    </body>
+</html>
