@@ -20,7 +20,7 @@ const generatePoints = function(){
 	});
 
 	// order by salary
-	// points.sort(compare);
+	points.sort(compare);
 
 	return points;
 };
@@ -32,6 +32,9 @@ function compare(a, b) {
  	//	you are you have written
  	//  the compare function
  	// --------------------------
+	 if (a.salary < b.salary) return -1;
+	 if (a.salary > b.salary) return 1;
+	 if (a.salary === b.salary) return 0;
 }
 
 
