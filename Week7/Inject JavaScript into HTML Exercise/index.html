@@ -2,7 +2,12 @@
   <script>
     window.onload = function () {
       const slot = document.getElementById("div1");
-      slot.innerHTML = "Hello World";
+      var time = 100;
+      const getTime= ()=>{
+        time = time - 1;
+        slot.innerHTML = 'Hello Words '  + time + ' secs';
+      }
+      setInterval(getTime, 1000);
     };
   </script>
   <body>
