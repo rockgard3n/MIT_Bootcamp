@@ -1,0 +1,12 @@
+/* so we have created two classes here, greenItems and redItems using CSS notation */
+
+.greenItems{
+    color: green;
+    font-size: 2em; /* this means twice the default size */
+}
+
+.redItems{
+    color: red;
+    font-size: 3em;
+}
+

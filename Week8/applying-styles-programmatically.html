@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dynamic M'fucker</title>
+    <style>
+        .on{
+            background: orange;
+        }
+        div{
+            padding: 50px;
+            text-align: center;
+            border-style: solid;
+            font-size: 2em;
+        }
+    </style>
+</head>
+<body>
+    <button onclick="off()">OFF</button>
+    <button onclick="on()">ON</button> <!--calls function we wrote below in the script section when we click the button-->
+    <div id="target">Target</div>
+    <script>
+        function on(){
+            const element = document.getElementById('target');
+            element.classList.add('on'); /*this adds the class we wrote in line 6*/
+        }
+        function off(){
+            const element = document.getElementById('target');
+            element.classList.remove('on');
+        }
+    </script>
+</body>
+</html>

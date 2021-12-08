@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Grid</title>
+    <style>
+        .on{
+            background: orange;
+        }                
+        .content{
+            display: grid;
+            grid-template-columns: repeat(10,1fr);
+            grid-template-rows: repeat(10,1fr);
+            gap: 5px;
+        }
+        div{
+            padding: 10px;
+            text-align: center;
+            border-style: solid;
+            font-size: 1em;
+        }
+    </style>
+</head>
+<body>
+    <button onclick="createGrid()">CREATE GRID</button>    
+    <button onclick="move()" style="margin-bottom: 10px;">MOVE</button>
+    <main class="content" id="target">
+    </main>
+    <script>
+        function createGrid(){
+            for(let i = 1; i < 101; i++){
+               const newDiv = document.createElement("div");
+               newDiv.setAttribute("id", "n" + i); /*assigns the div element i just made to be n1 or n2 etc */
+               const newContent = document.createTextNode(i); /*adds the number to inside the square*/
+               newDiv.appendChild(newContent); /*merges the text and the div element*/
+               document.getElementById('target').appendChild(newDiv); /*takes the new div i made and adds it to the mofuckin main class .content i want*/
+            }
+        }
+        function change(x){
+            const element = document.getElementById(x);
+            element.classList.toggle('on');
+        }
+        let timer = null;
+        
+        function move(){
+            let passOn = "n";
+            let passOff = ""
+            let count = 0;
+            timer = setInterval(() => {
+                if(count === 99){clearInterval(timer)};
+                count += 1;
+                passOn = "n" + count; 
+                passOff = "n" + (count-1);
+                change(passOn)
+                change(passOff)
+                console.log("passOn " + passOn + " passOff " + passOff)
+                
+            }, 100);
+            
+        } 
+    </script>
+</body>
+</html>

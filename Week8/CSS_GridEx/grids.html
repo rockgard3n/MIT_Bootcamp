@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Grid</title>
+    <style>
+        .content{
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;  /*fr is the fractional notation*/
+            grid-template-rows: 2fr 1fr 3fr; /* this is for our rows and max the first row 2x bigger than the first*/
+            gap: 5px; /* gap between elements*/
+        }
+        div{
+            background-color: cadetblue;
+            padding: 30px;
+            text-align: center;
+        }
+        div:nth-of-type(odd){
+            background: burlywood; /*this edits the odd divs for us*/
+        }
+    </style>
+</head>
+<body>
+    <main class="content"> <!-- identifies this numbered list for the .content class to affect-->
+        <div>1</div>
+        <div>2</div>
+        <div>3</div>
+        <div>4</div>
+        <div>5</div>
+        <div>6</div>
+        <div>7</div>
+        <div>8</div>
+    </main>
+</body>
+
+</html>

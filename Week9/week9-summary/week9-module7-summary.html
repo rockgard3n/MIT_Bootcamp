@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+
+<head>
+    <title>Asynchronous Code</title>
+    <link rel="stylesheet" href="./style.css">
+    <link rel="stylesheet" type="text/css" href="./proxima-nova-web-fonts-master/fonts/fonts.css" />
+</head>
+
+<body>
+    <div class="container">
+        <img src="mitxprologo.jpg" alt="MIT XPro Logo" width="250px" height="80px">
+        <h1 class="header-text">Asynchronous Code</h1>
+    </div>
+    <p>Please review the concepts covered this week.</p>
+
+<h2 id="asynchronous-code">Asynchronous code</h2>
+<p>Asynchronous code has events that are independent of the main program flow and are outside the program’s main thread. </p>
+<div class="async-image">
+<img src="async.png" alt="Asynchronous Diagram" height = 100% width = 90%>
+</div>
+
+<p>Here's a simple example.</p>
+<pre><code class="lang-javascript">
+<span class="hljs-comment">/*
+This code has an asynchronous setTimeout event
+running outside the main program's event loop
+*/</span>
+
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">first</span>(<span class="hljs-params"></span>) </span>{
+  setTimeout(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'the timer is done running outside the main event loop now!'</span>);
+}, <span class="hljs-number">2000</span>);
+  <span class="hljs-keyword">return</span> <span class="hljs-string">'first'</span>
+};
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">second</span>(<span class="hljs-params"></span>) </span>{
+  <span class="hljs-keyword">return</span> <span class="hljs-string">'second'</span>
+}
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">third</span>(<span class="hljs-params"></span>) </span>{
+  <span class="hljs-keyword">return</span> <span class="hljs-string">'third'</span>
+}
+
+<span class="hljs-built_in">console</span>.log(first());
+<span class="hljs-built_in">console</span>.log(second());
+<span class="hljs-built_in">console</span>.log(third());
+
+
+&gt; 
+first
+second
+third
+<span class="hljs-literal">undefined</span>
+the timer is done running outside the main event loop now!
+</code></pre>
+
+
+<h2 id="promises">Promises</h2>
+<p>A promise object represents the eventual completion, or failure, of an asynchronous operation, and its resulting
+    value. </p>
+<img src="promises.png" alt="Promises Diagram" height = 300px width = 90%>
+<p>Here's a simple example. </p>
+<pre><code class="lang-js"><span class="hljs-regexp">//</span>You promise to <span class="hljs-keyword">do</span> your laundry
+<span class="hljs-regexp">//</span><span class="hljs-keyword">this</span> promise <span class="hljs-keyword">is</span> either resolved <span class="hljs-keyword">or</span> rejected 
+
+let p = <span class="hljs-keyword">new</span> Promise(<span class="hljs-function"><span class="hljs-params">(resolve, reject)</span> =&gt;</span> {
+  let laundryDone = <span class="hljs-literal">false</span>
+  <span class="hljs-keyword">if</span> (laundryDone==<span class="hljs-literal">true</span>) {
+      <span class="hljs-regexp">//</span>resolve the promise here 
+      resolve(<span class="hljs-string">'Success'</span>)
+  } <span class="hljs-keyword">else</span> {
+      <span class="hljs-regexp">//</span>reject the promise here
+      reject(<span class="hljs-string">'Failed'</span>)
+  }
+})
+
+<span class="hljs-regexp">//</span><span class="hljs-keyword">Do</span> something <span class="hljs-keyword">else</span> after the promise resolves w/ .<span class="hljs-keyword">then</span> 
+<span class="hljs-regexp">//</span><span class="hljs-keyword">Do</span> something w/ error w/ .<span class="hljs-keyword">catch</span>
+p.<span class="hljs-keyword">then</span>(<span class="hljs-function"><span class="hljs-params">(message)</span> =&gt;</span> {
+    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'This message is in the .then: '</span> + message)
+}).<span class="hljs-keyword">catch</span>(<span class="hljs-function"><span class="hljs-params">(message)</span> =&gt;</span> {
+    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'This message is in the .catch: '</span> + message)
+})
+
+&gt;&gt; This message <span class="hljs-keyword">is</span> <span class="hljs-keyword">in</span> the .catch: Failed
+</code></pre>
+<h2 id="async-and-await">Async and await</h2>
+<p>Async functions are &quot;syntactic sugar&quot; (aka, cleaner, shorthanded syntax) to return and handle promises,
+    that avoid messy nested promise chains. </p>
+    <p>Here's a simple example.</p>
+<pre><code class="lang-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">resolveAfter3Seconds</span>(<span class="hljs-params"></span>) </span>{ 
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Promise</span>(<span class="hljs-function"><span class="hljs-params">resolve</span> =&gt;</span> {
+        setTimeout(<span class="hljs-function"><span class="hljs-params">()</span>=&gt;</span> {
+            resolve(<span class="hljs-string">'resolved'</span>);
+        }, <span class="hljs-number">3000</span>);
+    });
+}
+
+<span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">asyncCall</span>(<span class="hljs-params"></span>) </span>{
+    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'Calling now!'</span>);
+    <span class="hljs-keyword">const</span> result = <span class="hljs-keyword">await</span> resolveAfter3Seconds();
+    <span class="hljs-built_in">console</span>.log(result);
+}
+
+asyncCall();
+
+&gt;&gt;Calling now! <span class="hljs-comment">//asyncCall awaits the callback function resolveAfter3Seconds</span>
+&gt;&gt;<span class="hljs-built_in">Promise</span> {&lt;pending&gt;} <span class="hljs-comment">//Three seconds now pass</span>
+&gt;&gt;resolved <span class="hljs-comment">//The promise is caught in the result variable, and is resolved</span>
+</code></pre>
