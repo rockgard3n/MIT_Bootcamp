@@ -18,8 +18,113 @@
 <div id="map"></div>
 
 <script>
+mapboxgl.accessToken = 'pk.eyJ1Ijoicm9ja2dhcmQzbiIsImEiOiJja3hxYnFhd3Q1MnVrMm5vY3hhNGtwaWg2In0.JhEvifYpx8vXyOf4vSq8ng';
 
+var map = new mapboxgl.Map({
+    container: 'map', /* this is referencing the DIV Id "Map" we set up in line 15 */
+    style: 'mapbox://styles/mapbox/dark-v10',
+    center: [-87.624225,41.873941], /* starting location of long and lat */
+    zoom: 12 /* initial zoom on page */
+})
+// listen for event for when map is loaded 
+map.on('load', function(){
+    console.log("first check");
+    // create array to hold cirmes leveraging the GEOJSON syntax (can find it at geojson.org)
+    const crimes = [];
+    chicago.data.forEach((crime, i) =>{
+        crimes.push({
+            "type": "Feature",
+            "geometry":{
+                "type": "Point",
+                "coordinates": [crime[28], crime[26]] /*this is pulling chicago data for long and lat of the crime */
+            },
+            "properties":{
+                "dbh": (60*(Math.random()))
+            }
+        })
+    });
 
+    // put this all in GEOJSON feature colleciton
+    const geojson = {
+        "type": "FeatureCollection", "features": crimes
+    }
+    console.log(geojson);
+
+    // add data to the mapp
+    map.addSource('crime', {
+        'type': 'geojson',
+        'data': geojson
+    })
+
+map.addLayer(
+            {
+                'id': 'crime-heat',
+                'type': 'heatmap',
+                'source': 'crime',
+                'maxzoom': 15,
+                'paint': {
+                    // Increase the heatmap weight based on frequency and property magnitude
+                    'heatmap-weight': {
+                        'property': 'dbh',
+                        'type': 'exponential',
+                        'stops': [
+                            [1,0],
+                            [62,1]
+                        ]
+                    },
+                    // Increase the heatmap color weight weight by zoom level
+                    // heatmap-intensity is a multiplier on top of heatmap-weight
+                    'heatmap-intensity': {
+                        'stops': [
+                            [11,1],
+                            [15,3]
+                        ]
+                    },
+                    // Color ramp for heatmap.  Domain is 0 (low) to 1 (high).
+                    // Begin color ramp at 0-stop with a 0-transparancy color
+                    // to create a blur-like effect.
+                    'heatmap-color': [
+                        'interpolate',
+                        ['linear'],
+                        ['heatmap-density'],
+                        0,
+                        'rgba(33,102,172,0)',
+                        0.2,
+                        'rgb(103,169,207)',
+                        0.4,
+                        'rgb(209,229,240)',
+                        0.6,
+                        'rgb(253,219,199)',
+                        0.8,
+                        'rgb(239,138,98)',
+                        1,
+                        'rgb(178,24,43)'
+                    ],
+                    // Adjust the heatmap radius by zoom level
+                    'heatmap-radius': [
+                        'interpolate',
+                        ['linear'],
+                        ['zoom'],
+                        0,
+                        2,
+                        9,
+                        20
+                    ],
+                    // Transition from heatmap to circle layer by zoom level
+                    'heatmap-opacity': [
+                        'interpolate',
+                        ['linear'],
+                        ['zoom'],
+                        7,
+                        1,
+                        9,
+                        0
+                    ]
+                }
+            },
+            'waterway-label'
+        );
+});
 </script>
 </body>
 </html>

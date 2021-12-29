@@ -16,13 +16,22 @@
  
 <script>
 
+/*need to add mapbox token*/ 
+
+// get token from https://account.mapbox.com 
+mapboxgl.accessToken = 'pk.eyJ1Ijoicm9ja2dhcmQzbiIsImEiOiJja3hxYnFhd3Q1MnVrMm5vY3hhNGtwaWg2In0.JhEvifYpx8vXyOf4vSq8ng';
+
     var map = new mapboxgl.Map({
-        container: 'map',
+        container: 'map', /* this is referencing the DIV Id "Map" we set up in line 15 */
         style: 'mapbox://styles/mapbox/streets-v11',
-        center: [-71.091542,42.358862],
-        zoom: 12
+        center: [-71.091542,42.358862], /* starting location of long and lat */
+        zoom: 12 /* initial zoom on page */
     });
 
+    // adds marker to the map at a certain point
+    var marker = new mapboxgl.Marker()
+    .setLngLt([-71.091542, 42.358862])
+    .addTo(map);
 
 </script>
  

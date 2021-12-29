@@ -1,3 +1,5 @@
+<!-- This uses different syntax for Map API than the previous one because its version 3.3.1 and the 02_map excercise is an older version-->
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -12,6 +14,7 @@
 </style>
 </head>
 <body>
+  <!-- below three lines import shit for us to do clustering-->
 <script src='https://api.mapbox.com/mapbox.js/plugins/leaflet-markercluster/v1.0.0/leaflet.markercluster.js'></script>
 <link href='https://api.mapbox.com/mapbox.js/plugins/leaflet-markercluster/v1.0.0/MarkerCluster.css' rel='stylesheet' />
 <link href='https://api.mapbox.com/mapbox.js/plugins/leaflet-markercluster/v1.0.0/MarkerCluster.Default.css' rel='stylesheet' />
@@ -23,7 +26,31 @@
 
 <script>
 
+L.mapbox.accessToken = 'pk.eyJ1Ijoicm9ja2dhcmQzbiIsImEiOiJja3hxYnFhd3Q1MnVrMm5vY3hhNGtwaWg2In0.JhEvifYpx8vXyOf4vSq8ng';
 
+    var map = L.mapbox.map('map')
+      .setView([41.873941, -87.624225], 12)
+      .addLayer(L.mapbox.styleLayer('mapbox://styles/mapbox/streets-v11'));
+
+  const markers = new L.MarkerClusterGroup();
+  const data = chicago.data;
+  const length= data.length;
+
+for (let i=0; i < length; i++){
+  const a = chicago.data[i];
+  const title = a[13];
+  const marker = L.marker(
+    new L.LatLng(a[26], a[28]),
+    { icon: L.mapbox.marker.icon({
+      'marker-symbol': 'post',
+      'marker-color': '0044FF'}),
+      title: title
+    });
+      marker.bindPopup(title);
+    markers.addLayer(marker);
+}
+
+map.addLayer(markers);
 
 </script>
 </body>
