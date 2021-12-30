@@ -8,73 +8,58 @@ function createMap() {
     // TODO: add your own access token
     mapboxgl.accessToken = 'pk.eyJ1Ijoicm9ja2dhcmQzbiIsImEiOiJja3hxYnFhd3Q1MnVrMm5vY3hhNGtwaWg2In0.JhEvifYpx8vXyOf4vSq8ng';
   
-    const map = new mapboxgl.Map({
+    //makes map
+    var map = new mapboxgl.Map({
         container: 'map',
         style: 'mapbox://styles/mapbox/streets-v11',
-        center: [-122.436699, 37.809326],
-        zoom: 11,
+        center: [-122.4377, 37.7912],
+        zoom: 13,
       });
     
+     //makes my custom marker icon 
       map.loadImage(
         'https://docs.mapbox.com/mapbox-gl-js/assets/custom_marker.png',
         (error, image) => {
         if (error) throw error;
         map.addImage('custom-marker', image);
-        // Add a GeoJSON source with 2 points
+    
         console.log("image loaded");
 
         });
 
+        console.log("created map")
 
-      /*
-      var imageBus = new Image(100,200);
-      imageBus.src = 'busPNG.png';
-      document.body.appendChild(imageBus);
-
-      // load bus image for ya boy
-    map.addImage('busPNG.png', imageBus);
-    console.log("image loaded");
-
-    */
-
+        // calls the funciton to make markers
     setMarkers(map);
-      // TODO: add a marker to the map
-      /*
-      var marker = new mapboxgl.Marker()
-      .setLngLat([-122.436699, 37.809326])
-      .addTo(map);
-      */
 
-
+    //calls function to update markers to show movement of busses
+    setInterval(updateMarkers, 30000, map);
       }
     
 
+//loads main funciton when window loads
 window.onload = () => {
       createMap();
     };
 
 
+var count = 0;
+
+//this function sets up the markers using a GEOJSON format
 async function setMarkers(map) {
     // calls the collect function and then breaks it into outbound and inbound data arrays 
-    // var map = createMap();
     
-    
-
-    console.log("Is this working?")
+    console.log("SetMarkers() called")
       var BusObject = await collect();
-      geojsonIB = BusObject.Outbound;
-      geojsonOB = BusObject.Inbound;
 
-      console.log(geojsonIB);
+      console.log(Date.now() + " " + BusObject.Inbound.features[0].geometry.coordinates);
 
- 
-
-
+    //creates the GeoJSON and adds my inbound bus route
         map.addSource('IB', {
             'type': 'geojson',
-            'data': geojsonIB
+            'data': BusObject.Inbound
         });
-
+    //takes the geojson and adds a layer to the map to show us our bus markers    
         map.addLayer({
             'id': 'IB',
             'type': 'symbol',
@@ -92,38 +77,23 @@ async function setMarkers(map) {
             }
         });
 
-    
-
-
       
-      
-      console.log("source added");
-
-      //const myLayer = new mapboxgl.featureLayer().setGeoJSON(geojsonIB).addTo(map);
-
     }
 
-    /* THIS IS THE RIGHT IDEA BUT SOMETHINGS WRONG
-// this function moves the busses on the map 
-async function move(){
-    const BusObject = await collect();
-    OBarray = BusObject.Outbound;
-    IBarray = BusObject.Inbound;
-    /* this loop isnt working 
-    OBarray.forEach((location) => {
-        console.log(location.Longitude);
-        var marker = new mapboxgl.Marker()
-        .setLngLat([Number(location.Longitude), Number(location.Latitude)])
-        .addTo(map);
-    });
-
-    marker.Marker().setLngLat([-122.436610, 37.899326]);
-    //.addTo(map);
+//this funciton updates the GEOJSON with the live position of the busses and the the layer of the markers is updated to show the movement    
+async function updateMarkers(map) {
+    count++;
+    console.log("Loop # start: " + count)
+    BusObject = await collect();
+    console.log(Date.now() + " " + BusObject.Inbound.features[0].geometry.coordinates);
+    map.getSource('IB').setData(BusObject.Inbound);
+    console.log("Loop # end: " + count);
 }
-*/
+
 
 //this functions leverages data pulled from getBusLocations() and sorts the busses for the desired route, then sorts locations of busses on inbound and outbound routes into two seperate arrays
 async function collect(){
+    console.log("collect() called");
     const rawLocations = await getBusLocations();
     var RouteLocationsIB = [];
     var RouteLocationsOB = [];
@@ -163,12 +133,13 @@ async function collect(){
     }
     let BusObject = {Inbound: geojsonRouteIB, Outbound: geojsonRouteOB};
     return BusObject;
-    // console.log("These are OUTBOUND: " + RouteLocationsOB);
-    // console.log("These are INBOUND" + RouteLocationsIB);
-    // setTimeout(run, 15000);
+
 }
+
+
 // this async funciton pulls the data from the SFMTA API, and cuts out just the part we need which is the bus details
 async function getBusLocations(){
+    console.log("getBusLocations() called");
     const url = "http://api.511.org/transit/VehicleMonitoring?api_key=f0e7e4f5-928b-4378-abdd-2f04c0c4d0ae&agency=SF"
     const response = await fetch(url);
     const json = await response.json();
@@ -177,14 +148,3 @@ async function getBusLocations(){
     return json.Siri.ServiceDelivery.VehicleMonitoringDelivery.VehicleActivity;
 }
 
-// collect();
-    /*
-async function fetchData() {
-    var dataArray = [];
-    const makeRequest = async function(url) {
-        const response = await fetch(url);
-        const data = await response.text();
-        console.log(data);
-    }; 
-}
-*/
