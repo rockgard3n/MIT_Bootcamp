@@ -52,6 +52,9 @@ async function setMarkers(map) {
         map.addImage('custom-marker', image);
         // Add a GeoJSON source with 2 points
         console.log("image loaded");
+
+        });
+
         map.addSource('IB', {
             'type': 'geojson',
             'data': geojsonIB
@@ -73,8 +76,8 @@ async function setMarkers(map) {
                 'text-anchor': 'top'
             }
         });
-        
-    });
+
+    
 
 
       
