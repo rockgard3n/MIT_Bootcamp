@@ -43,14 +43,45 @@ async function setMarkers(map) {
 
       console.log(geojsonIB);
 
-      /*
-      map.addSource('IB', {
-          'type': 'geojson',
-          'data': geojsonIB
-      })
-      */
 
-      map.addLayer().setGeoJSON(geojsonIB);
+      
+      map.loadImage(
+        'https://docs.mapbox.com/mapbox-gl-js/assets/custom_marker.png',
+        (error, image) => {
+        if (error) throw error;
+        map.addImage('custom-marker', image);
+        // Add a GeoJSON source with 2 points
+        console.log("image loaded");
+        map.addSource('IB', {
+            'type': 'geojson',
+            'data': geojsonIB
+        });
+
+        map.addLayer({
+            'id': 'IB',
+            'type': 'symbol',
+            'source': 'IB',
+            'layout': {
+                'icon-image': 'custom-marker',
+                // get the title name from the source's "title" property
+                'text-field': ['get', 'title'],
+                'text-font': [
+                    'Open Sans Semibold',
+                    'Arial Unicode MS Bold'
+                ],
+                'text-offset': [0, 1.25],
+                'text-anchor': 'top'
+            }
+        });
+        
+    });
+
+
+      
+      
+      console.log("source added");
+
+      //const myLayer = new mapboxgl.featureLayer().setGeoJSON(geojsonIB).addTo(map);
 
     }
 
