@@ -1,0 +1,30 @@
+body {
+    font-family: 'Proxima Nova', Georgia, sans-serif;
+}
+
+.container { 
+  display: flex;
+  font-family: proxima-nova;
+  flex-direction: row;
+  background: #A80734;
+  color: white;
+  font-family: sans-serif; 
+  height: 80px;
+  }
+
+.header-text {
+    padding-bottom: 10px; 
+    padding-left: 10px;
+}
+
+  h2, h3, h4, h5 {
+      color: #A80734
+  }
+
+  .hello-world-image
+  .grid-image
+  .font-example { 
+    display: flex;
+    flex-direction: row;
+  }
+
