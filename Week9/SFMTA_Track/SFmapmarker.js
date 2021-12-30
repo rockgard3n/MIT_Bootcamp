@@ -15,6 +15,27 @@ function createMap() {
         zoom: 11,
       });
     
+      map.loadImage(
+        'https://docs.mapbox.com/mapbox-gl-js/assets/custom_marker.png',
+        (error, image) => {
+        if (error) throw error;
+        map.addImage('custom-marker', image);
+        // Add a GeoJSON source with 2 points
+        console.log("image loaded");
+
+        });
+
+
+      /*
+      var imageBus = new Image(100,200);
+      imageBus.src = 'busPNG.png';
+      document.body.appendChild(imageBus);
+
+      // load bus image for ya boy
+    map.addImage('busPNG.png', imageBus);
+    console.log("image loaded");
+
+    */
 
     setMarkers(map);
       // TODO: add a marker to the map
@@ -36,6 +57,9 @@ window.onload = () => {
 async function setMarkers(map) {
     // calls the collect function and then breaks it into outbound and inbound data arrays 
     // var map = createMap();
+    
+    
+
     console.log("Is this working?")
       var BusObject = await collect();
       geojsonIB = BusObject.Outbound;
@@ -43,17 +67,8 @@ async function setMarkers(map) {
 
       console.log(geojsonIB);
 
+ 
 
-      
-      map.loadImage(
-        'https://docs.mapbox.com/mapbox-gl-js/assets/custom_marker.png',
-        (error, image) => {
-        if (error) throw error;
-        map.addImage('custom-marker', image);
-        // Add a GeoJSON source with 2 points
-        console.log("image loaded");
-
-        });
 
         map.addSource('IB', {
             'type': 'geojson',
