@@ -33,20 +33,25 @@ window.onload = () => {
     };
 
 
-    async function setMarkers(map) {
+async function setMarkers(map) {
     // calls the collect function and then breaks it into outbound and inbound data arrays 
     // var map = createMap();
     console.log("Is this working?")
       var BusObject = await collect();
-      OBarray = BusObject.Outbound;
-      IBarray = BusObject.Inbound;
+      geojsonIB = BusObject.Outbound;
+      geojsonOB = BusObject.Inbound;
 
-      OBarray.forEach((location) => {
-          console.log(location);
-        var marker = new mapboxgl.Marker()
-        .setLngLat([location.Longitude, location.Latitude])
-        .addTo(map);
-      });
+      console.log(geojsonIB);
+
+      /*
+      map.addSource('IB', {
+          'type': 'geojson',
+          'data': geojsonIB
+      })
+      */
+
+      map.addLayer().setGeoJSON(geojsonIB);
+
     }
 
     /* THIS IS THE RIGHT IDEA BUT SOMETHINGS WRONG
@@ -80,9 +85,11 @@ async function collect(){
                     "type": "Feature",
                     "geometry": {
                         "type": "Point",
-                        "coordinates": [route.MonitoredVehicleJourney.VehicleLocation.Longitude, route.MonitoredVehicleJourney.VehicleLocation.Latitude]
+                        "coordinates": [Number(route.MonitoredVehicleJourney.VehicleLocation.Longitude), Number(route.MonitoredVehicleJourney.VehicleLocation.Latitude)]
                     },
-                    "properties":{}
+                    "properties":{
+                        "BusID": route.MonitoredVehicleJourney.VehicleRef
+                    }
                 }); 
             }
             else if (route.MonitoredVehicleJourney.DirectionRef == "IB") {
@@ -90,14 +97,22 @@ async function collect(){
                     "type": "Feature",
                     "geometry": {
                         "type": "Point",
-                        "coordinates": [route.MonitoredVehicleJourney.VehicleLocation.Longitude, route.MonitoredVehicleJourney.VehicleLocation.Latitude]
+                        "coordinates": [Number(route.MonitoredVehicleJourney.VehicleLocation.Longitude), Number(route.MonitoredVehicleJourney.VehicleLocation.Latitude)]
                     },
-                    "properties":{}
+                    "properties":{
+                        "BusID": route.MonitoredVehicleJourney.VehicleRef
+                    }
                 }); 
             }
         }
     });
-    let BusObject = {Inbound: RouteLocationsIB, Outbound: RouteLocationsOB};
+    var geojsonRouteIB = {
+        "type": "FeatureCollection", "features": RouteLocationsIB
+    }
+    var geojsonRouteOB = {
+        "type": "FeatureCollection", "features": RouteLocationsOB
+    }
+    let BusObject = {Inbound: geojsonRouteIB, Outbound: geojsonRouteOB};
     return BusObject;
     // console.log("These are OUTBOUND: " + RouteLocationsOB);
     // console.log("These are INBOUND" + RouteLocationsIB);
