@@ -1,0 +1,44 @@
+<html>
+
+<head>
+    <title>Rotate Matrix</title>
+    <!-- DO NOT CHANGE THIS LINE OF CODE -->
+    <script src="./rotateMatrix.js"></script>
+</head>
+
+<style>
+:root {
+  --grid-cols: 1;
+  --grid-rows: 1;
+}
+
+#container {
+  display: grid;
+  grid-gap: 1em;
+  grid-template-rows: repeat(var(--grid-rows), 1fr);
+  grid-template-columns: repeat(var(--grid-cols), 1fr);
+}
+
+.grid-item {
+  padding: 1em;
+  border: 1px solid #ddd;
+  text-align: center;
+}
+</style>
+
+<body>
+    <div id='game'>
+        <button onclick='transpose(A)' width='200' height='30'>Transpose</button>
+        <button onclick='exchangeCols(A)' width='200' height='30'>Shift Col</button>
+    </div>
+
+    <div id="container">
+    </div>
+</body>
+
+<script>
+    createGrid();
+    refreshGrid(A);
+</script>
+
+</html>

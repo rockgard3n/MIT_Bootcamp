@@ -12,6 +12,7 @@ function transpose(A) {
       swap(A, i, j, j, i);
     }
   }
+  refreshGrid(A);
 }
 function swap(A, i, j, k, l) {
   let temp = A[j][i];
@@ -27,11 +28,48 @@ function exchangeCols(A) {
       swap(A, col, row, N - 1 - col, row);
     }
   }
+  refreshGrid(A);
 }
 function rotateMatrix(A) {
   transpose(A);
   exchangeCols(A);
 }
-transpose(A);
-exchangeCols(A);
-console.log(JSON.stringify(A));
+// transpose(A);
+// exchangeCols(A);
+// console.log(JSON.stringify(A));
+
+
+// functions to make grid
+
+
+// Creates a default grid sized 16x16
+function createGrid() {
+    let n = A.length;
+    let m = A[0].length;
+    makeRows(n, m);
+}
+
+// Takes (rows, columns) input and makes a grid
+function makeRows(rows, cols, A) {
+  const container = document.getElementById("container");
+  container.style.setProperty('--grid-rows', rows);
+  container.style.setProperty('--grid-cols', cols);
+  for (c = 0; c < (rows * cols); c++) {
+    let cell = document.createElement("div");
+    cell.innerText = "";
+    container.appendChild(cell).className = "grid-item";
+  };
+  const node = container.childNodes[4];
+  console.log(node);
+};
+
+function refreshGrid(A) {
+  const container = document.getElementById("container")
+  let count = 1;
+  for (n = 0; n < A.length; n++) {
+    for (m = 0; m < A[0].length; m++) {
+      container.childNodes[count].innerText = A[n][m];
+      count++;
+    }
+  }
+}
