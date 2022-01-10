@@ -24,7 +24,7 @@
             const element = document.getElementById('target');
             element.classList.toggle('on');
         }
-        let timer = null;
+        let timer = null; /*by initializing variable outside of start() we let it be accessed by other functions. So start() and stop() can both f with timer*/ 
         function start(){
             timer = setTimeout(() => {
                 toggle();

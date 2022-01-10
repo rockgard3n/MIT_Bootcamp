@@ -1,6 +1,6 @@
 // this picks the bus route you want to mess with
-// ive been blocked by the SFMTA, becuase i had a loop inside the createmap fnction that i thought was only hitting every 15 seconds but was calling the.onload function by accident so was spamming the API
-const selectedRoute = 1;
+//const selectedRoute = "1";
+
 
 // const url = "http://api.511.org/transit/VehicleMonitoring?api_key=f0e7e4f5-928b-4378-abdd-2f04c0c4d0ae&agency=SF"
 
@@ -17,6 +17,7 @@ function createMap() {
       });
     
      //makes my custom marker icon 
+     
       map.loadImage(
         'https://docs.mapbox.com/mapbox-gl-js/assets/custom_marker.png',
         (error, image) => {
@@ -38,9 +39,11 @@ function createMap() {
     
 
 //loads main funciton when window loads
+/*
 window.onload = () => {
       createMap();
     };
+*/
 
 
 var count = 0;
@@ -49,17 +52,22 @@ var count = 0;
 async function setMarkers(map) {
     // calls the collect function and then breaks it into outbound and inbound data arrays 
     
+    //collects input for direction
+    var rawInputDir = document.getElementById("busDirection");
+    var selectedDir = rawInputDir.value;
+
     console.log("SetMarkers() called")
       var BusObject = await collect();
 
       console.log(Date.now() + " " + BusObject.Inbound.features[0].geometry.coordinates);
 
-    //creates the GeoJSON and adds my inbound bus route
+    if(selectedDir == "IB"){  
+         //creates the GeoJSON and adds my inbound bus route
         map.addSource('IB', {
             'type': 'geojson',
             'data': BusObject.Inbound
         });
-    //takes the geojson and adds a layer to the map to show us our bus markers    
+          //takes the geojson and adds a layer to the map to show us our bus markers    
         map.addLayer({
             'id': 'IB',
             'type': 'symbol',
@@ -76,7 +84,30 @@ async function setMarkers(map) {
                 'text-anchor': 'top'
             }
         });
-
+    } else {
+        //creates the GeoJSON and adds my outbound bus route
+        map.addSource('OB', {
+            'type': 'geojson',
+            'data': BusObject.Outbound
+        });
+         //takes the geojson and adds a layer to the map to show us our bus markers    
+        map.addLayer({
+            'id': 'OB',
+            'type': 'symbol',
+            'source': 'OB',
+            'layout': {
+                'icon-image': 'custom-marker',
+                // get the title name from the source's "title" property
+                'text-field': ['get', 'title'],
+                'text-font': [
+                    'Open Sans Semibold',
+                    'Arial Unicode MS Bold'
+                ],
+                'text-offset': [0, 1.25],
+                'text-anchor': 'top'
+            }
+        });
+    };
       
     }
 
@@ -85,19 +116,37 @@ async function updateMarkers(map) {
     count++;
     console.log("Loop # start: " + count)
     BusObject = await collect();
+    
+        //collects input for direction
+    const rawInputDir = document.getElementById("busDirection");
+    const selectedDir = rawInputDir.value;
+
     console.log(Date.now() + " " + BusObject.Inbound.features[0].geometry.coordinates);
-    map.getSource('IB').setData(BusObject.Inbound);
+    if(selectedDir == "IB"){
+        map.getSource('IB').setData(BusObject.Inbound);
+    } else {
+        map.getSource('OB').setData(BusObject.Outbound);
+    };
+
     console.log("Loop # end: " + count);
 }
 
 
 //this functions leverages data pulled from getBusLocations() and sorts the busses for the desired route, then sorts locations of busses on inbound and outbound routes into two seperate arrays
+//the commented out sections of the below function create a sorted array of all of the bus routes. Initially i was going to create this list programatically every time the page is loaded. But since the bus routes themselves wont change I decided to hard code it in.
 async function collect(){
     console.log("collect() called");
+    //collects input for route
+    var rawInput = document.getElementById("routeElement");
+    var selectedRoute = rawInput.value;
+
+
     const rawLocations = await getBusLocations();
     var RouteLocationsIB = [];
     var RouteLocationsOB = [];
+    //var routeList = [];
     rawLocations.forEach((route) => {
+        //routeList.push(route.MonitoredVehicleJourney.LineRef);
         if (route.MonitoredVehicleJourney.LineRef == selectedRoute) {
             if (route.MonitoredVehicleJourney.DirectionRef == "OB") {
                 RouteLocationsOB.push({
@@ -125,6 +174,12 @@ async function collect(){
             }
         }
     });
+    //console.log(routeList);
+    //let uniqueRouteList = [...new Set(routeList)];
+    //uniqueRouteList.sort();
+    //console.log("test " + uniqueRouteList);
+
+
     var geojsonRouteIB = {
         "type": "FeatureCollection", "features": RouteLocationsIB
     }

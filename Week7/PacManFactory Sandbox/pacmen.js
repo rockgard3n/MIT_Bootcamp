@@ -1,7 +1,7 @@
 let pos = 0;
 const pacArray = [
-  ['./images/PacMan1.png', './images/PacMan2.png'],
-  ['./images/PacMan3.png', './images/PacMan4.png'],
+  ['PacMan1.png', 'PacMan2.png'],
+  ['PacMan3.png', 'PacMan4.png'],
 ];
 let direction = 0;
 const pacMen = []; // This array holds all the pacmen
@@ -24,14 +24,23 @@ function makePac() {
   let game = document.getElementById('game');
   let newimg = document.createElement('img');
   newimg.style.position = 'absolute';
-  newimg.src = './images/PacMan1.png';
+  newimg.src = 'PacMan1.png';
   newimg.width = 100;
+  
+  var orient = document.createAttribute("orient");
+  orient.value = true;
+  newimg.setAttributeNode(orient);
+  newimg.orient = true;
+  console.log(newimg);
+  newimg.orient++;
+  console.log(newimg.orient);
 
   // TODO: set position here
   newimg.style.left = position.x;
   newimg.style.top = position.y;
   // TODO add new Child image to game
   game.appendChild(newimg);
+  console.log(newimg);
 
   // return details in an object
   return {
@@ -40,17 +49,32 @@ function makePac() {
     newimg,
   };
 }
+var count = 0;
+
+function updateChomp(){
+  pacMen.forEach((item) =>{
+    console.log(item.newimg);
+    item.newimg.src = pacArray[item.newimg.orient%2][count%2];
+  })
+  setTimeout(updateChomp, 100);
+}
 
 function update() {
   // loop over pacmen array and move each one and move image in DOM
   pacMen.forEach((item) => {
-    checkCollisions(item);
+    //item.newimg.src = pacArray[orient%2][count%2];
+    var check = checkCollisions(item);
     item.position.x += item.velocity.x;
     item.position.y += item.velocity.y;
+    if(check === true){
+      item.newimg.orient++;
+      console.log("BOOM + " + item.orient);
+    };
 
     item.newimg.style.left = item.position.x;
     item.newimg.style.top = item.position.y;
   });
+  count++;
   setTimeout(update, 20);
 }
 
@@ -59,14 +83,15 @@ function checkCollisions(item) {
   if (
     item.position.x + item.velocity.x + item.newimg.width > window.innerWidth ||
     item.position.x + item.velocity.x < 0
-  )
+  ) {
     item.velocity.x = -item.velocity.x;
+    return true;}
   if (
     item.position.y + item.velocity.y + item.newimg.height >
       window.innerHeight ||
     item.position.y + item.velocity.y < 0
   )
-    item.velocity.y = -item.velocity.y;
+    {item.velocity.y = -item.velocity.y;}
 }
 
 function makeOne() {
