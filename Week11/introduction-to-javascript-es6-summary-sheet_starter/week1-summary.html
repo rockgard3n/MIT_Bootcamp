@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+
+<head>
+  <title>Introduction to JavaScript ES6</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" type="text/css" href="proxima-nova-web-fonts-master/fonts/fonts.css" />
+</head>
+
+<body>
+  <div class="container">
+    <img src="mitxprologo.jpg" alt="MIT XPro Logo" width="250px" height="80px">
+    <h1 class="header-text">Introduction to JavaScript ES6</h1>
+  </div>
+  <p>Please review the concepts covered this week.</p>
+
+
+<h2 id="es6">ES6</h2>
+<p>ES6 is the current version of JavaScript that is standardized across the web. 
+  There is only ever one version of JavaScript in release at any given time. 
+  ES6 comes with new features and also more succinct patterns of writing JavaScript, which we will examine now. </p>
+<h2 id="default-paramaters">Default Parameters</h2>
+<p>Sometimes, when you are writing code, you want to have a default parameter set for incoming arguments. 
+  Say, for example, you are writing a function that multiplies any two numbers together to create an even number. 
+  By default, you want the second number to be two. You can either check each time to see if the second number inputted 
+  is two like so: </p>
+<pre><code class="lang-js"><span class="hljs-keyword">function</span> <span class="hljs-title">makeEven</span>(number1, number2) {
+  if(number2==2) {
+    <span class="hljs-keyword">return</span> <span class="hljs-type">number1</span> * number2;
+  } <span class="hljs-keyword">else</span> {
+    break;
+  };
+}
+```+.                             
+
+<span class="hljs-keyword">Or</span>, you can <span class="hljs-keyword">use</span> the faster ES6 style <span class="hljs-keyword">of</span> writing a default parameter into your <span class="hljs-keyword">function</span>, like so: 
+
+```js
+<span class="hljs-keyword">function</span> <span class="hljs-title">makeEven</span>(number1, number2=2) {
+  <span class="hljs-keyword">return</span> <span class="hljs-type">number1</span> * number2;
+}
+</code></pre>
+<h2 id="template-literals">Template Literals</h2>
+<p>Template literals help you write string concatenation faster, and also allows you to input values into strings. Before, to concatenate a string, you would have to write it like so: </p>
+<pre><code class="lang-js"><span class="hljs-keyword">let</span> <span class="hljs-attr">name</span> = <span class="hljs-string">"Marsha"</span>;
+<span class="hljs-keyword">let</span> <span class="hljs-attr">age</span> = <span class="hljs-number">23</span>;
+<span class="hljs-keyword">let</span> <span class="hljs-attr">major</span> = <span class="hljs-string">"Computer Science"</span>;
+
+<span class="hljs-keyword">let</span> <span class="hljs-attr">sentence</span> = name + <span class="hljs-string">" is "</span> + age + <span class="hljs-string">" years old and is studying "</span> + major + <span class="hljs-string">"."</span>;
+
+console.log(sentence)
+
+&gt;&gt;Marsha is <span class="hljs-number">23</span> years old <span class="hljs-literal">and</span> is studying Computer Science.
+</code></pre>
+<p>Now, with string template literals, you can simply add a ${} sign with whatever value or variable you want inside of it, and remove the plus signs.  </p>
+<p><em>Note</em> You must wrap the entire string in backticks, ``, in order for string template literals to work. </p>
+<pre><code class="lang-js"><span class="hljs-keyword">let</span> name = <span class="hljs-string">"Marsha"</span>;
+<span class="hljs-keyword">let</span> age = <span class="hljs-number">23</span>;
+<span class="hljs-keyword">let</span> major = <span class="hljs-string">"Computer Science"</span>;
+
+<span class="hljs-keyword">let</span> sentence = `${name} <span class="hljs-keyword">is</span> ${age} years old <span class="hljs-keyword">and</span> <span class="hljs-keyword">is</span> studying ${major}.`
+
+<span class="hljs-built_in">console</span>.log(sentence); 
+
+&gt;&gt;Marsha <span class="hljs-keyword">is</span> <span class="hljs-number">23</span> years old <span class="hljs-keyword">and</span> <span class="hljs-keyword">is</span> studying Computer Science.
+</code></pre>
+<p>You can also input expressions (computations)  into template literals. </p>
+<pre><code class="lang-js">function <span class="hljs-keyword">add</span><span class="bash">(num1, num2) {
+</span>  console.log(`The sum is ${num1 + num2}.`);
+}
+
+<span class="hljs-keyword">add</span><span class="bash">(3, 4)
+</span>&gt;&gt;The sum is <span class="hljs-number">7</span>.
+</code></pre>
+
+<h2 id="destructuring">Destructuring</h2>
+<p>Destructuring is a fast and convenient way to extract data from objects and arrays and put them into variables. </p>
+<p>Destructuring an array:</p>
+<pre><code class="lang-js">const numbers = [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>];
+[a, b, ...rest] = numbers
+console.log(a, b, rest)
+&gt;&gt;<span class="hljs-number">1</span> <span class="hljs-number">2</span> [<span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>];
+</code></pre>
+<p>Destructuring an object: </p>
+<pre><code class="lang-js"><span class="hljs-keyword">const</span> student = { major: <span class="hljs-string">"Political Science"</span> };
+<span class="hljs-keyword">const</span> {major: major} = student; 
+console.<span class="hljs-built_in">log</span>(major)
+&gt;&gt;Political Science
+</code></pre>
+<p>Using destructuring to declare variables: </p>
+<pre><code class="lang-js">let a<span class="hljs-comment">;</span>
+let <span class="hljs-keyword">b;
+</span>[a, <span class="hljs-keyword">b] </span>= [<span class="hljs-number">10</span>, <span class="hljs-number">20</span>]
+</code></pre>
+<p>Destructuring in a for-of loop: </p>
+<pre><code class="lang-js"><span class="hljs-keyword">const</span> students = [<span class="hljs-string">'Jose'</span>, <span class="hljs-string">'Keanu'</span>];
+
+<span class="hljs-keyword">for</span> (<span class="hljs-keyword">const</span> [<span class="hljs-keyword">index</span>, element] <span class="hljs-keyword">of</span> students.entries()) <span class="hljs-comment">{
+  console.log(index, element)
+}</span>
+<span class="hljs-comment">// Output:</span>
+<span class="hljs-comment">// 0 "Jose"</span>
+<span class="hljs-comment">// 1 "Keanu"</span>
+</code></pre>
+<h2 id="spread-and-rest">Spread and Rest</h2>
+<p>Spread &quot;expands&quot; an array into individual elements. You can use it to add items to arrays, combine arrays
+  or objects, or spread out an array to be used as individual function arguments. </p>
+<p>Concatenating arrays:</p>
+<pre><code class="lang-js">const nums1 = [<span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>];
+const nums2 = [<span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">2</span>];
+
+const nums3 = [...nums2, ...nums1];
+
+console.log(nums3)
+<span class="hljs-comment">//output </span>
+<span class="hljs-comment">//[0, 1, 2, 3, 4, 5]</span>
+</code></pre>
+<p>Copying an array: </p>
+<pre><code class="lang-js">const arr = [<span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>]
+const copiedArr = [...arr]
+console.log(copiedArr);
+<span class="hljs-comment">//output</span>
+<span class="hljs-comment">//[0, 1, 2, 3, 4, 5]</span>
+</code></pre>
+<p>Using spread with arguments in a function:</p>
+<pre><code class="lang-js">const students = [<span class="hljs-string">"Oliver"</span> , <span class="hljs-string">"Clara"</span>, <span class="hljs-string">"Mathias"</span>];
+const registerStudents = (s1, s2, s3) =&gt; { console.<span class="hljs-built-in">log</span>(`<span class="hljs-symbol">$</span>{s1}, <span class="hljs-symbol">$</span>{s2}, <span class="hljs-keyword">and</span> <span class="hljs-symbol">$</span>{s3} are <span class="hljs-keyword">all</span> registered <span class="hljs-keyword">for</span> CS <span class="hljs-number">100.</span>`) } 
+
+<span class="hljs-function"><span class="hljs-title">registerStudents</span>(<span class="hljs-params">...students</span>)</span>
+<span class="hljs-comment">//output</span>
+<span class="hljs-comment">//Oliver, Clara, and Mathias are all registered for CS 100.</span>
+</code></pre>
+<p>Rest takes remaining individual elements of an array or objects and collects them into a single variable, called
+  &#39;rest&#39;.</p>
+<p>Using rest to collect items in an array:</p>
+<pre><code class="lang-js">let nums = [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>, <span class="hljs-number">6</span>, <span class="hljs-number">7</span>, <span class="hljs-number">8</span>, <span class="hljs-number">9</span>];
+let [a, b, ...rest] = nums
+console.log(a, b, rest)
+<span class="hljs-comment">//output</span>
+<span class="hljs-comment">//1 2 [3, 4, 5, 6, 7, 8, 9]</span>
+</code></pre>
+<p>Using rest as an argument in a fucntion:</p>
+<pre><code class="lang-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">add</span><span class="hljs-params">(<span class="hljs-rest_arg">...nums</span>)</span> </span>{
+  let result = <span class="hljs-number">0</span>;
+  <span class="hljs-keyword">for</span>(let num of nums) result += num;
+  <span class="hljs-keyword">return</span> result
+}
+
+add(<span class="hljs-number">1</span>)
+<span class="hljs-comment">//output</span>
+<span class="hljs-comment">//1</span>
+
+add(<span class="hljs-number">1</span>, <span class="hljs-number">2</span>)
+<span class="hljs-comment">//output</span>
+<span class="hljs-comment">//3</span>
+
+add(<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>)
+<span class="hljs-comment">//output</span>
+<span class="hljs-comment">//15</span>
+</code></pre>
+<h2 id="scoping-with-let-and-const">Scoping with let and const</h2>
+<p>The let statement creates a block-scoped variable. The variable exists only inside the block, and disappears once the
+  block has been run. </p>
+<p>Block scope with let: </p>
+<pre><code class="lang-js"><span class="hljs-keyword">let</span> x = <span class="hljs-number">1</span>; 
+  <span class="hljs-keyword">if</span>(x === <span class="hljs-number">1</span>) {
+    <span class="hljs-keyword">let</span> x = <span class="hljs-number">10</span>;
+  console.<span class="hljs-built_in">log</span>(x);
+   }
+console.<span class="hljs-built_in">log</span>(x);
+<span class="hljs-comment">//output</span>
+<span class="hljs-comment">//10</span>
+<span class="hljs-comment">//1</span>
+</code></pre>
+<p>The const statement also declares a variable inside the block scope like let. The value of const can&#39;t be changed
+  through re-assignment. Also, any values declared with const cannot be redeclared. </p>
+<p>Block scope with const: </p>
+<pre><code class="lang-js"><span class="hljs-keyword">const</span> <span class="hljs-built_in">num</span> = <span class="hljs-number">7</span>;
+<span class="hljs-keyword">if</span>(<span class="hljs-built_in">num</span> ===<span class="hljs-number">7</span>) {
+  <span class="hljs-keyword">const</span> <span class="hljs-built_in">num</span> = <span class="hljs-number">10</span>;
+  console.log(<span class="hljs-built_in">num</span>);
+ }
+console.log(<span class="hljs-built_in">num</span>);
+<span class="hljs-comment">//output</span>
+<span class="hljs-comment">//10</span>
+<span class="hljs-comment">//7</span>
+</code></pre>
+<h2 id="modules">Modules</h2>
+<p>Modules are a way to break up large JavaScript programs to import and export functionality as needed. Modules are
+  incredibly useful to developers, as the size and complexity of JavaScript has grown a great deal since its inception.
+</p>
+<p>To export a function as a module, simply put the export keyword in front of the function keyword</p>
+<pre><code class="lang-js"><span class="hljs-keyword">export</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">sayHello</span>(<span class="hljs-params"></span>) </span>{
+  <span class="hljs-keyword">return</span> <span class="hljs-string">'Hello, World!'</span>
+}
+</code></pre>
+<p>To import modules, use the &#39;import&#39; keyword in the file you wish to use the module in, along with the
+  filepath to where the module is stored. </p>
+<pre><code class="lang-js"><span class="hljs-keyword">import</span> {sayHello} <span class="hljs-keyword">from</span> <span class="hljs-string">'./hello.js'</span>
+</code></pre>
+<h2 id="closures">Closures</h2>
+<p>A closure in JavaScript gives you access to a function&#39;s outer scope within its inner scope; that is to say,
+  anything in the outer scope of a function is also available in its inner scope. </p>
+<p>Here is an example of a nested function using <em>closure</em> to access variables in its outer function. </p>
+<pre><code class="lang-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">sayHello</span>(<span class="hljs-params"></span>) </span>{
+  <span class="hljs-keyword">var</span> name = <span class="hljs-string">"Mark"</span> <span class="hljs-comment">// this variable is in the outer scope of the function</span>
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">greet</span>(<span class="hljs-params"></span>) </span>{
+      alert(<span class="hljs-string">`Oh, hi <span class="hljs-subst">${name}</span>.`</span>) <span class="hljs-comment">// You can access the variable 'name' in the outer scope in the inner scope</span>
+    }
+  greet()
+}
+<span class="hljs-comment">//Output</span>
+<span class="hljs-comment">//Oh, hi Mark.</span>
+</code></pre>
+
+<p class="footer">© MIT xPRO 2020. All rights reserved.</p>
+
+</body>
+</html>
