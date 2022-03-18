@@ -3,7 +3,7 @@ class Book extends HTMLElement {
     constructor() {
         super();
     }
-
+//for it to work programatically we are adding the set book(book) to capture the html so we can pass in a book into this html
     set book(book){
         this.innerHTML = `
             <div class="card">

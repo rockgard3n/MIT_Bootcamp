@@ -1,5 +1,8 @@
 import './books.js'
+//this file is pulling data from the books.json file and making each iteratiion within the json file as mit book object
+//there was also a change to the book.js file 
 
+//we are watching for the document to load, when that does we are going to run a funciton 
 window.addEventListener('load', ()=> {
     createBookList();
 });

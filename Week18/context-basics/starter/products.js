@@ -1,4 +1,5 @@
 function Products(){
+    // eeverytime hit products we'll add a user to our context
     const ctx = React.useContext(UserContext);  
     ctx.users.push(Math.random().toString(36).substr(2, 5));
 
