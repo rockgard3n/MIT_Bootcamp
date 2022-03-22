@@ -1,9 +1,9 @@
-// sumulate getting products from DataBase
+/ simulate getting products from DataBase
 const products = [
-  { name: "Apples_:", country: "Italy", cost: 3, instock: 10 },
-  { name: "Oranges:", country: "Spain", cost: 4, instock: 3 },
-  { name: "Beans__:", country: "USA", cost: 2, instock: 5 },
-  { name: "Cabbage:", country: "USA", cost: 1, instock: 8 },
+  { name: "Apples", country: "Italy", cost: 3, instock: 10 },
+  { name: "Oranges", country: "Spain", cost: 4, instock: 3 },
+  { name: "Beans", country: "USA", cost: 2, instock: 5 },
+  { name: "Cabbage", country: "USA", cost: 1, instock: 8 },
 ];
 //=========Cart=============
 const Cart = (props) => {
@@ -33,7 +33,7 @@ const useDataApi = (initialUrl, initialData) => {
         const result = await axios(url);
         console.log("FETCH FROM URl");
         if (!didCancel) {
-          dispatch({ type: "FETCH_SUCCESS", payload: result.data });
+          dispatch({ type: "FETCH_SUCCESS", payload: result.data.data });
         }
       } catch (error) {
         if (!didCancel) {
@@ -90,9 +90,9 @@ const Products = (props) => {
   } = ReactBootstrap;
   //  Fetch Data
   const { Fragment, useState, useEffect, useReducer } = React;
-  const [query, setQuery] = useState("http://localhost:1337/products");
+  const [query, setQuery] = useState("http://localhost:1337/api/products");
   const [{ data, isLoading, isError }, doFetch] = useDataApi(
-    "http://localhost:1337/products",
+    "http://localhost:1337/api/products",
     {
       data: [],
     }
@@ -103,24 +103,44 @@ const Products = (props) => {
     let name = e.target.name;
     let item = items.filter((item) => item.name == name);
     console.log(`add to Cart ${JSON.stringify(item)}`);
+    //Remove item from stock
+    let stock = items;
+    for (let i=0; i<stock.length; i++) {
+      if (item[0].name == stock[i].name) {
+        if (stock[i].instock == 0) {
+          alert(`Oops! Looks like we're out of ${stock[i].name}. Time to restock!`);
+          return;
+        } else {
+          stock[i].instock --;
+        };
+      }
+    };
+    setItems(stock);
     setCart([...cart, ...item]);
     //doFetch(query);
   };
-  const deleteCartItem = (index) => {
+  const deleteCartItem = (index, name) => {
     let newCart = cart.filter((item, i) => index != i);
+    //Restock
+    let stock = items;
+    for (let i=0; i<stock.length; i++) {
+      if (name == stock[i].name) {
+        stock[i].instock ++;
+      }
+    };
+    setItems(stock);
     setCart(newCart);
   };
-  const photos = ["apple.png", "orange.png", "beans.png", "cabbage.png"];
 
   let list = items.map((item, index) => {
-    //let n = index + 1049;
-    //let url = "https://picsum.photos/id/" + n + "/50/50";
+    let n = index + 1049;
+    let url = "https://picsum.photos/id/" + n + "/50/50";
 
     return (
       <li key={index}>
-        <Image src={photos[index % 4]} width={70} roundedCircle></Image>
+        <Image src={url} width={70} roundedCircle></Image>
         <Button variant="primary" size="large">
-          {item.name}:{item.cost}
+          {item.name} - ${item.cost} - in-stock: {item.instock}
         </Button>
         <input name={item.name} type="submit" onClick={addToCart}></input>
       </li>
@@ -135,11 +155,12 @@ const Products = (props) => {
           </Accordion.Toggle>
         </Card.Header>
         <Accordion.Collapse
-          onClick={() => deleteCartItem(index)}
+          onClick={() => deleteCartItem(index, item.name)}
           eventKey={1 + index}
         >
           <Card.Body>
-            $ {item.cost} from {item.country}
+            $ {item.cost} from {item.country}<br/>
+            Click again to remove
           </Card.Body>
         </Accordion.Collapse>
       </Card>
@@ -165,15 +186,28 @@ const Products = (props) => {
     console.log(`total updated to ${newTotal}`);
     return newTotal;
   };
+  // TODO: implement the restockProducts function
   const restockProducts = (url) => {
     doFetch(url);
-    let newItems = data.map((item) => {
-      let { name, country, cost, instock } = item;
-      return { name, country, cost, instock };
+      let newItems = data.map((item) => {
+      let { name, country, cost, instock } = item.attributes;
+      return {name, country, cost, instock };
     });
-    setItems([...items, ...newItems]);
+    // Add stock to existing item list
+    let stock = items;
+    for (let i=0; i<stock.length; i++) {
+      for (let j=0; j<newItems.length; j++) {
+        if (stock[i].name == newItems[j].name) {
+          let newStockNumber = stock[i].instock + newItems[j].instock;
+          stock[i].instock = newStockNumber;
+        };
+      };
+    };
+    setItems(stock);
+    let theCart = cart;
+    setCart(theCart);
   };
-
+    
   return (
     <Container>
       <Row>
@@ -194,10 +228,13 @@ const Products = (props) => {
       <Row>
         <form
           onSubmit={(event) => {
+            console.log('Submitting!!!!!');
             restockProducts(`http://localhost:1337/${query}`);
             console.log(`Restock called on ${query}`);
             event.preventDefault();
-          }}
+          }
+        }
+      
         >
           <input
             type="text"

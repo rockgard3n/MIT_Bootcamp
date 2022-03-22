@@ -1,0 +1,7 @@
+{
+  "dependencies": {
+    "-": "^0.0.1",
+    "global": "^4.4.0",
+    "http-server": "^14.1.0"
+  }
+}
