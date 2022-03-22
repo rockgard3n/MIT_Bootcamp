@@ -1,9 +1,9 @@
-// simulate getting products from DataBase
+// LIAM: simulate getting products from DataBase
 const products = [
-  { name: "Apples:", country: "Italy", cost: 3, instock: 10 },
-  { name: "Oranges:", country: "Spain", cost: 4, instock: 3 },
-  { name: "Beans:", country: "USA", cost: 2, instock: 5 },
-  { name: "Cabbage:", country: "USA", cost: 1, instock: 8 },
+  { name: "Apples", country: "Italy", cost: 3, instock: 10 },
+  { name: "Oranges", country: "Spain", cost: 4, instock: 3 },
+  { name: "Beans", country: "USA", cost: 2, instock: 5 },
+  { name: "Cabbage", country: "USA", cost: 1, instock: 8 },
 ];
 //=========Cart=============
 const Cart = (props) => {
@@ -90,7 +90,7 @@ const Products = (props) => {
   } = ReactBootstrap;
   //  Fetch Data
   const { Fragment, useState, useEffect, useReducer } = React;
-  const [query, setQuery] = useState("http://localhost:1337/api/products");
+  const [query, setQuery] = useState("api/products");
   const [{ data, isLoading, isError }, doFetch] = useDataApi(
     "http://localhost:1337/api/products",
     {
@@ -128,7 +128,7 @@ const Products = (props) => {
       <li key={index}>
         <Image src={photos[index % 4]} width={70} roundedCircle></Image>
         <Button variant="primary" size="large">
-          {item.name}:{item.cost}:{item.instock}
+          {item.name} Cost: {item.cost} Stock: {item.instock}
         </Button>
         <input name={item.name} type="submit" onClick={addToCart}></input>
       </li>
@@ -147,7 +147,8 @@ const Products = (props) => {
           eventKey={1 + index}
         >
           <Card.Body>
-            $ {item.cost} from {item.country}
+            $ {item.cost} from {item.country} <br/>
+            (Click Here to remove item)
           </Card.Body>
         </Accordion.Collapse>
       </Card>
@@ -180,14 +181,17 @@ const Products = (props) => {
       let { name, country, cost, instock } = item.attributes;
       return {name, country, cost, instock };
     });
-    // Add stock to existing item list
     let stock = items;
-    for (let i=0; i<stock.length; i++) {
-      for (let j=0; j<newItems.length; j++) {
-        if (stock[i].name == newItems[j].name) {
-          let newStockNumber = stock[i].instock + newItems[j].instock;
-          stock[i].instock = newStockNumber;
-        };
+    for (let i=0; i<newItems.length; i++) {
+      let failureCount = 0;
+      for (let j=0; j<stock.length; j++) {
+        if (stock[j].name == newItems[i].name) {
+          let newStockNumber = stock[j].instock + newItems[i].instock;
+          stock[j].instock = newStockNumber;
+        }else{failureCount++};
+        if (failureCount == stock.length){
+          stock.push(newItems[i]);
+        }
       };
     };
     setItems(stock);
@@ -217,7 +221,7 @@ const Products = (props) => {
       <Row>
         <form
           onSubmit={(event) => {
-            restockProducts(`${query}`);
+            restockProducts(query);
             console.log(`Restock called on ${query}`);
             event.preventDefault();
           }}
