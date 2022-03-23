@@ -1,4 +1,4 @@
-// LIAM: simulate getting products from DataBase
+// LIAM: gets our baseline before we call the DB
 const products = [
   { name: "Apples", country: "Italy", cost: 3, instock: 10 },
   { name: "Oranges", country: "Spain", cost: 4, instock: 3 },
