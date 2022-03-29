@@ -38,7 +38,7 @@ test("user-events allows users to add...", () => {
 });
 
 
-/* Following is how youd test if you wanted to use the DOM rather than the test library 
+/* Following is how youd test if you wanted to use the DOM rather than the test library youd do this
 import React from 'react';
 import * as ReactDOM from 'react-dom';
 import App from './App';
