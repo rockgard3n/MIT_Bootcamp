@@ -1,7 +1,5 @@
 FROM node:slim
 
-MAINTAINER abelsan <abel@mit.edu>
-
 WORKDIR /app
 
 # copy code, install npm dependencies
